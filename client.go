@@ -100,12 +100,6 @@ func (client *Client) GetBody() []byte {
 	return client.body
 }
 
-// UrlEncode set weighter urlencode the params or not.default to true.
-func (client *Client) UrlEncode(urlEncode bool) *Client {
-	client.urlEncode = urlEncode
-	return client
-}
-
 func (client *Client) getParamBody() string {
 	if len(client.params) == 0 {
 		return ""
@@ -138,6 +132,13 @@ func (client *Client) buildGetUrl() string {
 	return ret
 }
 
+func (client *Client) WithJson(content string) *Client {
+	client.WithBody(content)
+	client.WithHeader("Content-Type", "application/json")
+	client.urlEncode = false
+	return client
+}
+
 func (client *Client) setParamBody() {
 	if client.urlEncode {
 		client.WithHeader("Content-Type", "application/x-www-form-urlencoded")
@@ -161,7 +162,7 @@ func (client *Client) Url(urlStr string) *Client {
 
 // Response execute the request and get the response, return error if error happens.
 func (client *Client) Response() (resp *response, err error) {
-	if client.resp != nil { // provent multiple call
+	if client.resp != nil {
 		resp = client.resp
 		return
 	}

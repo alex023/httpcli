@@ -1,6 +1,8 @@
 package httpcli
 
 import (
+	"encoding/json"
+	"fmt"
 	"testing"
 )
 
@@ -21,7 +23,6 @@ func TestRequest_InsecureTLS(t *testing.T) {
 func TestPost(t *testing.T) {
 	req := Post("https://baidu.com").WithTLS().
 		WithParam("wd", "查询")
-	//t.Log(req.Info())
 	resp, err := req.Response()
 	if err != nil || len(resp.Info()) == 0 {
 		t.Error(err)
